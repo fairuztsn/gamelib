@@ -35,6 +35,20 @@ std::map<std::string, std::string> readGamelibFile(const std::string &filename)
     return fileContent;
 }
 
+bool keyExists(std::map<std::string, std::string> map, std::string key)
+{
+    std::map<std::string, std::string>::iterator it = map.find(key);
+
+    if (it != map.end())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 int main(int argc, char *argv[]) 
 {
     if (argc < 2) {
@@ -78,33 +92,43 @@ int main(int argc, char *argv[])
 
                 for (int j = 2; j < argc; ++j)
                 {
-                    auto it = gameDirectoryMap.find(argv[j]);
-
-                    if (it != gameDirectoryMap.end())
-                    {
+                    if(keyExists(gameDirectoryMap, argv[j])) {
+                        auto it = gameDirectoryMap.find(argv[j]);
+                        
                         gameDirectoryMap.erase(it);
+
                         std::cout << "'" << argv[j] << "' removed from the lib." << std::endl;
-                    }
-                    else
+                    }else
                     {
                         std::cerr << "'" << argv[j] << "' not found in the lib." << std::endl;
                     }
                 }
 
                 break;
-            }else if(key == "ls") {
-                return 0;
+            }else if(key == "all") {
+                for (std::map<std::string, std::string>::const_iterator it = gameDirectoryMap.begin(); it != gameDirectoryMap.end(); ++it)
+                {
+                    const std::string &key = it->first;
+                    std::cout << key << ", ";
+                }
+
+                std::cout << std::endl;
+                break;
             }
             
             value = argument.substr(equalSignPosition+1);
+            if(keyExists(gameDirectoryMap, key))
+            {
+                std::cout << "Updated '" << key << "'" << std::endl;
+            }else {
+                std::cout << "Added '" << key << "'" << std::endl;
+            }
             gameDirectoryMap[key] = value;
-
-            std::cout<<key<<"="<<gameDirectoryMap[key]<<std::endl;
         }
     }
 
     std::ofstream outFile(fileName);
-    
+
     if (outFile.is_open())
     {
         for (std::map<std::string, std::string>::const_iterator it = gameDirectoryMap.begin(); it != gameDirectoryMap.end(); ++it)
