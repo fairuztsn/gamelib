@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     }
 
     std::ofstream outFile(fileName);
-    std::cout<<outFile.is_open()<<std::endl;
+    
     if (outFile.is_open())
     {
         for (std::map<std::string, std::string>::const_iterator it = gameDirectoryMap.begin(); it != gameDirectoryMap.end(); ++it)
