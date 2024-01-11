@@ -3,3 +3,5 @@
 
 # Ignore gamelib.exe
 gamelib.exe
+
+.gamelib
