@@ -60,7 +60,6 @@ int main(int argc, char *argv[])
     for(int i=0; i < argc; i ++) 
     {
         std::string argument = argv[i];
-        std::cout<<argument<<std::endl;
 
         if(argument.compare(0, 2, "--") == 0) 
         {
@@ -70,7 +69,31 @@ int main(int argc, char *argv[])
             if(key == "help") {
                 // TODO: Add usage
                 std::cout<<"Usage"<<std::endl;
-                return 1;
+                return 0;
+            }else if(key == "remove") {
+                if(argc == 2) {
+                    std::cerr<<"No arguments found, use eg. --remove game1 game2 ..";
+                    return 1;
+                }
+
+                for (int j = 2; j < argc; ++j)
+                {
+                    auto it = gameDirectoryMap.find(argv[j]);
+
+                    if (it != gameDirectoryMap.end())
+                    {
+                        gameDirectoryMap.erase(it);
+                        std::cout << "'" << argv[j] << "' removed from the lib." << std::endl;
+                    }
+                    else
+                    {
+                        std::cerr << "'" << argv[j] << "' not found in the lib." << std::endl;
+                    }
+                }
+
+                break;
+            }else if(key == "ls") {
+                return 0;
             }
             
             value = argument.substr(equalSignPosition+1);
@@ -81,7 +104,7 @@ int main(int argc, char *argv[])
     }
 
     std::ofstream outFile(fileName);
-
+    std::cout<<outFile.is_open()<<std::endl;
     if (outFile.is_open())
     {
         for (std::map<std::string, std::string>::const_iterator it = gameDirectoryMap.begin(); it != gameDirectoryMap.end(); ++it)
