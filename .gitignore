@@ -1,3 +1,5 @@
-./.vscode
+# Ignore Visual Studio Code settings folder
+.vscode/
 
-./gamelib.exe
+# Ignore gamelib.exe
+gamelib.exe
